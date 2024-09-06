@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+
+<!-- === Header Starts === -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title> Promptable Closed-loop Traffic Simulation </title>
+    <link href="./assets/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/font.css" rel="stylesheet" type="text/css">
+    <link href="./assets/style.css" rel="stylesheet" type="text/css">
+    <script src="./assets/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/corpus.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            /* padding: 20px; */
+            padding-right: 1060px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .txtt {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: rgb(0, 0, 0);
+            font-size: 30px;
+        }
+        .txttb {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        lin {
+            margin-bottom: 10px;
+            margin-left: 30px;
+        }
+        .module-description {
+            margin-left: 60px;
+        }
+        .dataset-example-container {
+            list-style-type: none;
+            padding: 0;
+        }
+        .dataset-example-entry {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            padding: 10px 15px;
+            border-radius: 0 4px 4px 0;
+            transition: background-color 0.3s ease;
+        }
+        .dataset-example-entry:hover {
+            background-color: #e8f4f8;
+        }
+        .dataset-highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .dataset-highlight::before {
+        content: "\00a0"; /* Non-breaking space */
+        display: inline-block;
+        width: 0.3em;
+        }
+        .dataset-highlight::after {
+        content: "\00a0"; /* Non-breaking space */
+        display: inline-block;
+        width: 0.5em;
+        }
+    </style>
+
+    <style>
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            display: flex;
+            margin-bottom: 10px;
+            margin-left: 130px;
+            align-items: center;
+        }
+        .name, .type, .example {
+            flex: 1;
+            padding-right: 0px;
+        }
+        .name {
+            flex: 0 0 150px;
+        }
+        .type {
+            flex: 0 0 120px;
+        }
+        .separator {
+            flex: 0 0 50px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+
+</head>
+<!-- === Header Ends === -->
+
+<script>
+    var lang_flag = 1;
+
+</script>
+
+<body>
+
+<!-- === Home Section Starts === -->
+<div class="section" style="margin-top: 15pt">
+    <!-- === Title Starts === -->
+    <div class="header" style="padding-bottom: 0pt;margin-bottom: 0pt; min-height: 50pt">
+        <table>
+            <tr>
+                <td>
+                    <div style="padding-top: 0pt;padding-left: 140pt;padding-bottom: 0pt;margin-bottom: 0pt;" class="title" id="lang">
+                        <b> Promptable Closed-loop Traffic Simulation
+                        </b>
+                    </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <!-- === Title Ends === -->
+    <div class="author" style="padding-top: 0pt; margin-top: 0pt">
+    <p style="text-align:center">Conference on Robot Learning (CoRL) 2024</p>
+
+      <a href="https://ariostgx.github.io/website/" target="_blank">Shuhan Tan</a><sup>1</sup>,&nbsp;&nbsp;
+      <a href="https://www.borisivanovic.com/" target="_blank">Boris Ivanovic</a><sup>2</sup>,&nbsp;&nbsp;
+      <a href="https://research.nvidia.com/person/yuxiao-chen/" target="_blank">Yuxiao Chen</a><sup>2</sup>,&nbsp;&nbsp;
+      <a href="https://sites.google.com/site/boyilics/home/" target="_blank">Boyi Li</a><sup>2</sup>,&nbsp;&nbsp;
+      <br>
+      <a href="https://www.xinshuoweng.com/" target="_blank">Xinshuo Weng</a><sup>2</sup>,&nbsp;&nbsp;
+      <a href="https://kikacaty.github.io/" target="_blank">Yulong Cao</a><sup>2</sup>,&nbsp;&nbsp;
+      <a href="http://www.philkr.net/" target="_blank">Philipp Kr&auml;henb&uuml;hl</a><sup>1</sup>,
+      <a href="https://research.nvidia.com/person/marco-pavone/" target="_blank">Marco Pavone</a><sup>2</sup>&nbsp;&nbsp;
+    </div>
+
+    <div class="institution" style="font-size: 14pt;">
+        <div>
+            <sup>1</sup>UT Austin,
+            <sup>2</sup>NVIDIA<br>
+        </div>
+    </div>
+    <table border="0" align="center">
+        <tr>
+            <td align="center" style="padding: 0pt 0 15pt 0">
+                <a class="bar" href=""><b>Webpage</b></a> |
+                <a class="bar" href=""><b>Video</b></a> |
+                <a class="bar" href=""><b>Paper</b></a> |
+                <a class="bar" href=""><b>Code</b></a> |
+                <a class="bar" href=""><b>Dataset</b></a> 
+            </td>
+        </tr>
+    </table>
+    
+    <center>
+        <video class="video-container" width="100%" height="340" style="padding-left: 0pt;margin-top: 0pt" autoplay
+               muted loop id="demo_video_1">
+            <source src="assets/prosim_demo_video_2.mp4" type=video/mp4>
+        </video>
+        <div class="text">
+            <br>
+            Example of Promptable Closed-loop Traffic Simulation. 
+            <br>
+            All agents are controlled by <span class="txttb">ProSim</span>: green ones are unconditioned, others are prompted with multimodal prompts.
+        </div>
+    </center>
+</div>
+
+
+<!-- === Overview Section Starts === -->
+<div class="section">
+    <!-- <div class="title" id="method">Overview</div> -->
+    <div class="title" id="method"><span class="txtt">ProSim</span></div>
+    <div class="body">
+
+      <div class="text">
+        <p>In this work, we propose a new task: <i>promptable closed-loop traffic simulation </i>.
+            Aside from simulating realistic traffic agent interactions in <b>closed-loop</b>, traffic models should also generate agent motions that satisfy a complex set of <b>user-specified prompts</b>, which contains multimodal prompts like:
+            <ul>
+                <li>
+                    <span class="name" style="color: rgb(95, 172, 250);">Goal Point</span>
+                    <span class="separator"></span>
+                    <span class="type">one point</span>
+                    <span class="separator"></span>
+                    <span class="example">a 3D point of the agent destination</span>
+                </li>
+                <li>
+                    <span class="name" style="color: rgb(110, 185, 206);">Route Sketch</span>
+                    <span class="separator"></span>
+                    <span class="type">many points</span>
+                    <span class="separator"></span>
+                    <span class="example">a noisy sketch of the agent's route</span>
+                </li>
+                <li>
+                    <span class="name" style="color: rgb(249, 205, 144);">Action Tag</span>
+                    <span class="separator"></span>
+                    <span class="type">categorical</span>
+                    <span class="separator"></span>
+                    <span class="example"><i>Accelerate</i>, <i>LeftTurn</i></span>
+                </li>
+                <li>
+                    <span class="name" style="color: rgb(235, 157, 135);">Text instruction</span>
+                    <span class="separator"></span>
+                    <span class="type">textual</span>
+                    <span class="separator"></span>
+                    <span class="example">"Instruct &lt;A0&gt; to decelerate before turning right."</span>
+                </li>
+            </ul>        </p>
+
+        <p>
+            Towards this problem, we propose <span class="txttb">ProSim</span>, a multimodal promptable closed-loop traffic simulation framework.
+            <span class="txttb">ProSim</span> allows the user to give a complex set of numerical, categorical or textual prompts to instruct each agent's behavior and intention.
+            <span class="txttb">ProSim</span> then rolls out a traffic scenario in a closed-loop manner, modeling each agent's interaction with other traffic participants.
+            We show the architecture of <span class="txttb">ProSim</span> in below.
+        </p>
+        </div>
+
+            <div class="teaser">
+                <img src="assets/prosim_model.jpg">
+                <div class="text">
+                    <br>
+                    Overview of <span class="txttb">ProSim</span> architecture.
+                </div>
+            </div>
+            <div class="text">
+
+            <p><span class="txttb">ProSim</span> consists of three main modules:</p>
+    
+            <ul>
+                <lin>
+                    <span class="txttb">Encoder</span>:
+                    <div class="module-description">Efficiently encodes a scene initialization (map and agent states) to a shared set of scene tokens.</div>
+                </lin>
+                <lin>
+                    <span class="txttb">Generator</span>:
+                    <div class="module-description">Takes the scene tokens and agent prompts to generate policy tokens for all agents.</div>
+                </lin>
+                <lin>
+                    <span class="txttb">Policy</span>:
+                    <div class="module-description">For each agent, takes the agent's policy token, current state, and observation to generate the next state. Note that we run this module for all the agents separately in parallel to simulate agent interactions.
+                    </div>
+                </lin>
+            </ul>
+            
+            During rollout, <span class="txttb">ProSim</span> only runs the heavy <span class="txttb">Encoder</span> and <span class="txttb">Generator</span> once, while the <span class="txttb">Policy</span> runs for all agents in parallel.
+            This design enables us to train and inference with <span class="txttb">ProSim</span> in closed-loop with high efficiency.
+            </p>
+        
+            To enable complex textural prompts, in the policy token <span class="txttb">Generator</span>, we use an LLM to comprehend the natural language prompt and policy queries, and generate language-conditioned policy queries for all agents.
+            In particular, we use a <b>Llama3-8B</b> model finetuned with LoRA as backbone, with two MLP adaptors:
+
+            <div class="teaser">
+                <img src="assets/prosim_llm.jpg">
+                <div class="text">
+                    <br>
+                    Language condition encoder in  <span class="txttb">ProSim</span>.
+                </div>
+            </div>
+
+            <p><span class="txttb">ProSim</span> prioritizes three key properties:</p>
+    
+            <ul>
+                <lin>
+                    <strong>Promptable</strong>:
+                    <div class="module-description"> Allows users to give
+                        a flexible combination of multimodal prompts for each agent. </div>
+                </lin>
+                <lin>
+                    <strong>Closed-loop</strong>:
+                    <div class="module-description"> Allows agents to interact with the map
+                        and other agents in real-time, simulating real-world reactive behaviors.</div>
+                </lin>
+                <lin>
+                    <strong>Efficient</strong>:
+                    <div class="module-description"> Simulates a 8-second traffic scenario with 64 agents and text prompt within <b>50ms</b> on a single GPU.</div>
+                    </div>
+                </lin>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<div class="section" style=" text-align: left">
+    <div class="title" id="Ack"><span class="txtt">ProSim-Instruct-520k</span> </div>
+    <p>To provide realistic and diverse agent motion data with multimodal prompts for our task, we propose <span class="txttb">ProSim-Instruct-520k</span>: a high-quality paired prompt- scenario dataset with <b>520K</b> real-world driving scenarios from the <a href="https://waymo.com/open/" target="_blank">Waymo Open Motion Dataset </a>(WOMD). 
+    <br>
+    
+    <span class="txttb">ProSim-Instruct-520k</span> includes multimodal prompts for more than <b>10M</b> unique agents, representing over <b>575 hours</b> of driving data. For each scenario, it includes <span class="name" style="color: rgb(95, 172, 250);">Goal Points</span> and  <span class="name" style="color: rgb(110, 185, 206);">Route Sketchs</span> for each of the agents. For most agents, it contains  <span class="name" style="color: rgb(249, 205, 144);">Action Tags</span> that describe agent movement behaviors, which are automatically labeled and quality assured by humans. Finally, <span class="txttb">ProSim-Instruct-520k</span> includes 20 <span class="name" style="color: rgb(235, 157, 135);">Text Instructions</span> for each sceanrio, describing both scenario-level and agent-level behaviors and interactions, labeled by LLama3-70B given the action tags and  metadata. In total, <span class="txttb">ProSim-Instruct-520k</span> contains over <b>10M</b> text prompts. </p>
+
+    <p>Here we show examples from different types of <span class="name" style="color: rgb(235, 157, 135);">Text Instructions</span> from  <span class="txttb">ProSim-Instruct-520k</span>. Note all agent names are refered as <span class="dataset-highlight">&lt;id&gt;</span>, where "id" is the abbreviated agent id in the WOMD dataset.</p>
+
+    <p>Simple agent behaviors:</p>
+    <ul class="dataset-example-container">
+        <li class="dataset-example-entry">"Have <span class="dataset-highlight">&lt;71f1c&gt;</span> maintain a steady acceleration from start to finish"</li>
+        <li class="dataset-example-entry">"Keep <span class="dataset-highlight">&lt;df6a1&gt;</span> moving straight after 65 seconds."</li>
+        <li class="dataset-example-entry">"Command <span class="dataset-highlight">&lt;dad99&gt;</span> and <span class="dataset-highlight">&lt;a261a&gt;</span> to stop after 40 seconds."</li>
+    </ul>
+    
+    <p>Temporal transitions of agent behaviors:</p>
+    <ul class="dataset-example-container">
+        <li class="dataset-example-entry">"Let <span class="dataset-highlight">&lt;ego&gt;</span>   maintain a steady speed after decelerating"</li>
+        <li class="dataset-example-entry">"After slowing, instruct the bicycle <span class="dataset-highlight">&lt;d3ddc&gt;</span> to continue on a direct trajectory."</li>
+        <li class="dataset-example-entry">"Initially, <span class="dataset-highlight">&lt;8cc93&gt;</span> accelerates, but then slows down and comes to a stop."</li>
+    </ul>
+    
+    <p>Scenario-level properties:</p>
+    <ul class="dataset-example-container">
+        <li class="dataset-example-entry">"Most vehicles, except for a few, are parked and stationary at the start of the simulation.""</li>
+        <li class="dataset-example-entry">"Emphasize the limited activity within the scene,  agents either stopping or staying within their lanes."</li>
+        <li class="dataset-example-entry">"Keep all parked vehicles stationary to represent a low-activity scene."</li>
+
+    </ul>
+    
+    <b>We will release all the annotated prompts and labeling tools of <span class="txttb">ProSim-Instruct-520k</span>. Stay tuned!</b>
+
+</div>
+
+<div class="section">
+    <div class="title" id="method">Results</div>
+    <p>
+        Let's take a closer look at one example of <span class="txttb">ProSim</span> in the promptable closed-loop traffic simulation task.
+    </p>
+    <center>
+        <video class="video-container" width="100%" height="340" style="padding-left: 0pt;margin-top: 0pt" autoplay
+               muted loop id="demo_video_2">
+            <source src="assets/prosim_demo_video_1.mp4" type=video/mp4>
+        </video>
+        <div class="text">
+            All agents are controlled by <span class="txttb">ProSim</span>: green ones are unconditioned, others are prompted with multimodal prompts.
+        </div>
+    </center>
+    <p>
+        We can observe <span class="txttb">ProSim</span>'s two core properties from some examples above:
+        <ul>
+            <lin>
+                <strong>Promptable</strong>:
+                <div class="module-description"> In Figure (d), 4 agents being prompted by a single sentence with complex high-
+                    level information, with other 2 agents simultaneously prompted by low-level goal points. . </div>
+            </lin>
+            <lin>
+                <strong>Closed-loop</strong>:
+                <div class="module-description"> Note that the unconditioned right-turning agent A7 in Figure (a) changes its behavior to yield to A24 in Figure (c). Also, the two agents following A7 brake as A7 yields in Figure (c). These behaviors shows dynamic agent interactions through closed-loop rollout</div>
+            </lin>
+        </ul>
+
+        We quantatively show that <span class="txttb">ProSim</span> achieves high controllability when given prompts from different modalities:
+        
+        <div class="teaser">
+            <img src="assets/prosim_table_1.jpg" style="width: 80%; max-width: 800px; height: auto;">
+            <div class="text">
+                <br>
+                Controllability evaluation of <span class="txttb">ProSim</span>.
+            </div>
+        </div>
+        
+
+        When no prompt is given, <span class="txttb">ProSim</span> can also achieve competitive performance on <a href="https://waymo.com/intl/zh-cn/research/the-waymo-open-sim-agents-challenge/" target="_blank">Waymo Sim Agents Challange</a>:
+
+        <div class="teaser">
+            <img src="assets/prosim_table_2.jpg" style="width: 80%; max-width: 600px; height: auto;">
+            <div class="text">
+                <br>
+                WOMD Sim Agents Challenge 2024.
+            </div>
+        </div>
+
+</div>
+
+<div class="section" style=" text-align: left">
+    <div class="title" id="Video">Demo Video</div>
+    <div class="body">
+        <div class="video-container" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
+<iframe width="900" height="600" src="https://www.youtube.com/embed/6qHRhzIjRjI" title="YouTube video player"
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+
+<div class="section" style=" text-align: left">
+    <div class="title" id="Ack">Acknowledgement </div>
+    <p>We thank  <a href="https://zhaoyue-zephyrus.github.io/" target="_blank">Yue Zhao</a>, <a href="https://janghyuncho.github.io/" target="_blank">Vincent Cho</a>, <a href="https://jozhang97.github.io/" target="_blank">Jerry Ouyang-Zhang</a>, and <a href="https://www.bradyzhou.com/" target="_blank">Brady Zhou</a> for their insightful discussions. </p>
+    
+    <!-- This material is supported by the National Science Foundation under Grant No. IIS-1845485.</p> -->
+    <!-- <p> -->
+    <!-- Thanks to <a href="https://metadriverse.github.io/metadrive/">MetaDrive</a> for the template. -->
+    <!-- </p> -->
+</div>
+
+
+<!-- === Reference Section Starts === -->
+<div class="section">
+    <div class="bibtex">
+        <div class="text">Reference</div>
+    </div>
+    <pre>
+@inproceedings{
+    tan2024promptable,
+    title={Promptable Closed-loop Traffic Simulation},
+    author={Tan, Shuhan and Ivanovic, Boris and Chen, Yuxiao and Li, Boyi and Weng, Xinshuo and Cao, Yulong and Kr{\"a}henb{\"u}hl, Philipp and Pavone, Marco},
+    booktitle={8th Annual Conference on Robot Learning},
+    year={2024},
+}    </pre>
+</div>
+
+</body>
+</html>
