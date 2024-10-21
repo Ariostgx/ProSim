@@ -1,0 +1,13 @@
+*.pyc
+__pycache__/
+.vscode/
+.idea/
+*.log
+*.pth
+*.ckpt
+*.pt
+*.npy
+*.npz
+*.zip
+*.tar.gz
+.DS_Store

@@ -1,0 +1,29 @@
+TYPES: ['llm_text_OneText', 'goal', 'drag_point', 'v_action_tag']
+
+USE_PRIORITY_MASK: False
+
+SAMPLE_MODE:
+  TRAIN: 'fix_sample_rate'
+  VAL: 'fix_sample_rate'
+  TEST: 'fix_sample_rate'
+
+RANDOM_SAMPLE:
+  TRAIN: True
+  VAL: True
+  TEST: True
+
+SAMPLE_RATE: 0.25
+
+MAX_COND_PER_SCENE: 128
+
+MOTION_TAG:
+  USED_TAGS: ['Accelerate', 'Decelerate', 'KeepSpeed', 'Stopping', 'LeftLaneChange', 'RightLaneChange', 'KeepLane', 'LeftTurn', 'RightTurn', 'Straight', 'Parked']
+
+  USE_PROCESSING: True
+  INTEGRATE_TOLERANCE: 10
+  MIN_DURATION: 10
+
+LLM_TEXT_FOLDER:
+  TRAIN: '/lustre/fsw/portfolios/nvr/users/shuhant/workspace/traj2text/data/llama3_output/waymo/train/70b_0.8_0.9_action_prompt_v2'
+  VAL: '/lustre/fsw/portfolios/nvr/users/shuhant/workspace/traj2text/data/llama3_output/waymo/val/70b_0.8_0.9_action_prompt_v2'
+  TEST: '/lustre/fsw/portfolios/nvr/users/shuhant/workspace/traj2text/data/llama3_output/waymo/val/70b_0.8_0.9_action_prompt_v2'

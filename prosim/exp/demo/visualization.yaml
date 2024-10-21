@@ -1,0 +1,323 @@
+DEBUG: False
+SAVE_CHECKPOINT: True
+
+WANDB_PROJ: prosim_mixture
+EXPERIMENT_DIR: 'results/paper/prompt_condition/waymo/mixture_control_no_priority'
+EXPERIMENT_NAME: goal_tag_dragpoint_text_fix_1.0
+
+LOAD_CHECKPOINT_MODEL: True
+LOAD_CHECKPOINT_PATH: /lustre/fsw/portfolios/nvr/users/shuhant/results/results/prompt_condition/waymo/mixture_control_no_priority/goal_tag_dragpoint_text_fix_1.0/hpc_ckpt_15.ckpt
+
+MAX_EPOCHES: 1
+LIMIT_TRAIN_BATCHES: 1.0
+VAL_INTERVAL: 1
+ENABLE_VIS: False
+VIS_INTERVAL: 400
+
+TRAIN:
+  BATCH_SIZE: 16
+  NUM_WORKERS: 32
+  LR: 0.0
+  SCHEDULER:
+    TYPE: 'LinearWarmupCosineAnnealingLR'
+    WARMUP_STEPS: 2500
+    MAX_STEPS: 228270
+
+VAL:
+  BATCH_SIZE: 16
+  NUM_WORKERS: 32
+  SHUFFLE: False
+
+TEST:
+  BATCH_SIZE: 16
+  NUM_WORKERS: 32
+  SHUFFLE: False
+
+ROLLOUT:
+  ENABLE: False
+  MODE: "distributed"
+  NUM_WORKERS: 4
+  INTERVAL_EPOCH: 1
+  WARMUP_EPOCH: 0
+  CONTROL_NUM: 1
+  
+  POLICY:
+    REPLAN_FREQ: 10
+    POLICY_FREQ: 80
+    MAX_STEPS: 80
+    POLICY_START_FRAME: 10
+    TOP_K: 1
+
+TASK:
+  TYPES: ['motion_pred']
+  MOTION_PRED:
+    WEIGHT: 1.0
+    LOSS: paired_mse_k
+    METRICS: ['pair_traj_pred']
+    PROMPT: 'agent_status'
+PROMPT:
+  AGENT_STATUS:
+    USE_VEL: True
+    USE_EXTEND: True
+    USE_AGENT_TYPE: True
+    
+  CONDITION:
+    TYPES: ['goal', 'v_action_tag', 'drag_point', 'llm_text_OneText']
+
+    SAMPLE_MODE:
+      TRAIN: 'normal_sample_rate'
+      VAL: 'none'
+    
+    SAMPLE_RATE: 1.0
+    
+    RANDOM_SAMPLE:
+      TRAIN: True
+      VAL: False
+  
+    MAX_COND_PER_SCENE: 128
+
+    MOTION_TAG:
+      USED_TAGS: ['Accelerate', 'Decelerate', 'KeepSpeed', 'Stopping', 'LeftLaneChange', 'RightLaneChange', 'KeepLane', 'LeftTurn', 'RightTurn', 'Straight', 'Parked']
+
+      USE_PROCESSING: True
+      INTEGRATE_TOLERANCE: 10
+      MIN_DURATION: 10
+
+    LLM_TEXT_FOLDER:
+      TRAIN: '/lustre/fsw/portfolios/nvr/users/shuhant/workspace/traj2text/data/llama3_output/waymo/train/70b_0.8_0.9_action_prompt_v2'
+      VAL: '/lustre/fsw/portfolios/nvr/users/shuhant/workspace/traj2text/data/llama3_output/waymo/val/70b_0.8_0.9_action_prompt_v2'
+      TEST: '/lustre/fsw/portfolios/nvr/users/shuhant/workspace/traj2text/data/llama3_output/waymo/val/70b_0.8_0.9_action_prompt_v2'
+
+    USE_PRIORITY_MASK: False
+    SAMPLE_BEFORE_PRIORITY: False
+    USE_SOFT_PRIORITY: False
+    
+LOSS:
+  USE_CLS_TRAJ: True
+  USE_PED_CYCLIST: True
+  
+  GOAL_WEIGHT: 0.0
+  
+  STEP_TRAJ:
+    POS_WEIGHT: 0.0
+    CLS_WEIGHT: 0.0
+    HEAD_WEIGHT: 0.0
+    VEL_WEIGHT: 0.0
+  
+  ROLLOUT_TRAJ:
+    ENABLE: True
+    WEIGHT: 1.0
+    VEL_WEIGHT: 10.0
+    HEAD_WEIGHT: 10.0
+    
+    USE_OFFROAD_LOSS: False
+    USE_COLLISION_LOSS: False
+
+    USE_GOAL_PRED_LOSS: True
+    GOAL_MODEL_LR_SCALE: 0.0
+    GOAL_PRED_LOSS_COND_MASK: False
+    GOAL_WEIGHT: 0.0
+
+    USE_PROMPT_LOSS: True
+    PROMPT_WEIGHT: 1000.0
+
+  TRAJ_CRITERION:
+    TYPE: 'huber'
+    HUBER_DELTA: 1.0
+
+DATASET:
+  CACHE_MAP: True
+  USE_WAYMO_ROAD_EDGE: False
+  USE_RASTER_MAP: False
+  USE_MOTION_TAGS: False
+
+  TYPE: 'prosim_imitation'
+
+  USE_ALL_AGENTS: False
+  USE_PED_CYCLIST: True
+
+  MAP:
+    COLLATE_MODE: 'lane'
+    CENTER_SAMPLE_RATE: 1
+    EDGE_SAMPLE_RATE: 4
+    MAX_LANE_POINTS: 20
+    INCLUDE_TYPES: ['center', 'right_edge', 'left_edge']
+
+  AGENT:
+    USE_SAMPLE:
+      TRAIN: True
+      VAL: True
+      TEST: True
+
+    SAMPLE_MODE: scene
+    SCENE_MAX_AGENT: 128
+
+  SOURCE:
+    TRAIN: ['waymo_val']
+    VAL: ['waymo_val']
+    TEST: ['waymo_val']
+    ROLLOUT: ['waymo_val']
+
+  DATA_LIST:
+    MODE: all
+
+  SCENE:
+    SAMPLE_RATE:
+      TRAIN: 1
+      VAL: 1
+      TEST: 1
+      ROLLOUT: 1
+      
+  USE_EGO_CENTER:
+    TRAIN: True
+    VAL: True
+    TEST: True
+  
+  MOTION:
+    DT: 0.1
+    HISTORY_SEC: 1.0
+    FUTURE_SEC:
+      TRAIN: 8.0
+      VAL: 8.0
+      TEST: 8.0
+      ROLLOUT: 8.0
+
+  FORMAT:
+    MAP:
+      MAX_POINTS: 2048
+      WITH_TYPE_EMB: True
+      WITH_DIR: True
+
+    TARGET:
+      SAMPLE_RATE: 10
+      STEPS: 10
+      ELEMENTS: 'x,y,h'
+      TAIL_PADDING: True
+
+    TYPES:
+      IO_PAIR: local_T_step
+    
+    HISTORY:
+      ELEMENTS: 'x,y,s,c,xd,yd,xdd,ydd'
+      STEPS: 11
+      WITH_EXTEND: True
+      WITH_AGENT_TYPE: True
+      WITH_TIME_EMB: True
+
+    GOAL:
+      LOCAL: True
+    
+    SYM_COORD:
+      MAP: True
+      OBS: True
+    
+    FUTURE_OBS_TYPE: 'latest'
+    FUTURE_OBS_UPDATE_CENTER: True
+
+MODEL:
+  OBS_UPDATE:
+    ATTN_UPDATE: False
+    FUSION: 'replace'
+
+  HIDDEN_DIM: 128
+  REL_POS_EDGE_FUNC: radius
+  
+  TYPE: prosim_policy_relpe_T_step_temporal_close_loop
+  
+  MAP_ENCODER:
+    MLP:
+      POOL: 'max'
+
+  SCENE_ENCODER:
+    TYPE: attn_fusion_relpe
+    ATTN:
+      LEARNABLE_PE: False
+      NUM_LAYER: 6
+      NUM_HEAD: 8
+      FF_DIM: 16
+      MAX_NUM_NEIGH: 32
+
+    MAP_TYPE: 'pointnet'
+    OBS_TYPE: 'pointnet'
+
+  DECODER:
+    TYPE: attn_fusion_relpe
+    
+    GOAL_PRED:
+      ENABLE: False
+    
+    ATTN:
+      PROMPT_CENTER: True
+      LEARNABLE_PE: False
+      NUM_LAYER: 6
+      NUM_HEAD: 8
+      FF_DIM: 16
+      SCENE_RADIUS: 300
+      PROMPT_RADIUS: 300
+      MAX_NUM_NEIGH: 512
+  
+  POLICY:
+    TYPE: rel_pe_temporal
+    
+    ACT_DECODER:
+      TYPE: policy_no_rnn
+
+      TRAJ:
+        K: 1
+        PRED_GMM: False
+        PRED_VEL: True
+        PRED_MODE: anchor
+
+      CONTEXT:
+        GOAL: False
+        EMD: True
+        GT_GOAL: False
+
+      ATTN:
+        POLICY_CENTER: True
+        LEARNABLE_PE: False
+        NUM_LAYER: 6
+        NUM_HEAD: 8
+        FF_DIM: 16
+        AGENT_RADIUS: 100
+        MAP_RADIUS: 50
+        MAX_NUM_NEIGH: 768
+
+  CONDITION_TRANSFORMER:
+    LR_SCALE: 10.0
+    
+    USE_TEMPORAL_ENCODING: True
+    ATTN_TYPE: 'gnn'
+    NLAYER: 3
+    COND_POOL_FUNC: 'mean'
+    CONDITION_LOCATIONS: ['policy_decoder'] # 'prompt_encoder', 'policy_decoder'
+    CONDITION_ENCODER:
+      TEXT:
+        BASE_MODEL: 'llama'
+        LLM:
+          USE_PROMPT_TOKEN: True
+          REPLACE_AGENT_TOKEN: True
+          MODEL: 'llama3_8b_instruct'
+          PROMPT_TAIL: True
+          AGENT_TOKEN_MODE: 'none'
+          DETACH_PROMPT_TOKEN: False
+          
+          LORA_LR_SCALE: 1.0
+          ADAPTER_LR_SCALE: 1.0
+
+          USE_TEXT_PROMPT_MASK: False
+
+          PROMPT_LOSS:
+            PROMPT_MASK_PRED: True
+
+          USE_SYSTEM_INSTRUCTION: False
+          ADD_BOS_EOS: False
+
+    TEXT_ATTN:
+      TYPE: 'llama'
+      LORA:
+        ENABLE: True
+        R: 16
+        DROPOUT: 0.1
+        ALPHA: 0.1
+        EMBEDDING_ONLY: False
