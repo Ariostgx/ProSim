@@ -59,7 +59,7 @@ Please download the Llama3-8B-Instruct model from [Meta's model hub](https://hug
 
 ### Play with the demo notebook
 
-We provide a demo notebook `text_prompt_inference.ipynb` for text prompting. Just replace the `LLAMA_PATH` with your local path to Llama3-8B-Instruct model.
+We provide a demo notebook `prosim_demo/text_prompt_inference.ipynb` for text prompting. Just replace the `LLAMA_PATH` with your local path to Llama3-8B-Instruct model.
 
 
 ## ProSim-Instruct-520k
