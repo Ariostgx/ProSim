@@ -149,9 +149,9 @@ DATASET:
 
   SOURCE:
     TRAIN: ['waymo_train']
-    VAL: ['waymo_train']
-    TEST: ['waymo_train']
-    ROLLOUT: ['waymo_train']
+    VAL: ['waymo_val']
+    TEST: ['waymo_val']
+    ROLLOUT: ['waymo_val']
 
   DATA_LIST:
     MODE: all
