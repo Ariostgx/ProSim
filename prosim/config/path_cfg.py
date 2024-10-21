@@ -10,6 +10,7 @@ CN = Config
 # obtain the directory to this file
 code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 data_dir = os.path.join(os.path.dirname(code_dir), 'demo_dataset')
+label_dir = os.path.dirname(os.path.dirname(code_dir))
 
 ROOT_DIR = code_dir
 TRAJDATA_CACHE_DIR = os.path.join(data_dir, 'trajdata_cache')
@@ -18,7 +19,7 @@ DEMO_DATA_DIR = TRAJDATA_CACHE_DIR
 # LLM_MODEL_DIR = '/storage/Models/shuhan/Meta-Llama-3-8B-Instruct'
 LLM_MODEL_DIR = '' # Replace with your local path to Meta-Llama-3-8B-Instruct huggingface model directory
 
-PROSIM_INSTRUCT_520K_DATA_DIR = os.path.join(data_dir, 'prosim_instruct_520k_data')
+PROSIM_INSTRUCT_520K_DATA_DIR = os.path.join(label_dir, 'prosim_instruct_520k')
 
 MOTION_TAG_PATH = os.path.join(PROSIM_INSTRUCT_520K_DATA_DIR, 'tag_prompts')
 TEXT_PROMPT_PATH = os.path.join(PROSIM_INSTRUCT_520K_DATA_DIR, 'text_prompts')
@@ -65,6 +66,7 @@ PATHS['local'].MODEL.DECODER.GOAL_PRED = CN()
 PATHS['local'].MODEL.DECODER.GOAL_PRED.K_CLUSTER_PATH = None
 
 PATHS['local'].DATASET.CACHE_PATH = TRAJDATA_CACHE_DIR
+PATHS['local'].DATASET.DATA_PATHS.PROSIM_INSTRUCT_520K = PROSIM_INSTRUCT_520K_DATA_DIR
 PATHS['local'].DATASET.DATA_PATHS.MOTION_TAGS = CN()
 PATHS['local'].DATASET.DATA_PATHS.MOTION_TAGS.TRAIN = os.path.join(MOTION_TAG_PATH, 'waymo_train_v_action/tags')
 PATHS['local'].DATASET.DATA_PATHS.MOTION_TAGS.VAL = os.path.join(MOTION_TAG_PATH, 'waymo_val_v_action/tags')
