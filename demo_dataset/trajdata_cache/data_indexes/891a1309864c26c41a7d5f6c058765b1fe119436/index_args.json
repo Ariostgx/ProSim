@@ -1,0 +1,27 @@
+{
+    "desired_data": [
+        "waymo_train"
+    ],
+    "scene_description_contains": null,
+    "centric": "scene",
+    "desired_dt": 0.1,
+    "history_sec": [
+        1.0,
+        1.0
+    ],
+    "future_sec": [
+        8.0,
+        8.0
+    ],
+    "incl_robot_future": false,
+    "only_types": [
+        "VEHICLE",
+        "PEDESTRIAN",
+        "BICYCLE"
+    ],
+    "only_predict": null,
+    "no_types": null,
+    "ego_only": true,
+    "select_ids": [],
+    "select_logs": []
+}

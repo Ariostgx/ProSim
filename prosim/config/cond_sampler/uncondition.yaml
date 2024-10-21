@@ -1,0 +1,17 @@
+TYPES: []
+
+USE_PRIORITY_MASK: False
+
+SAMPLE_MODE:
+  TRAIN: 'fix_sample_rate'
+  VAL: 'fix_sample_rate'
+  TEST: 'fix_sample_rate'
+
+RANDOM_SAMPLE:
+  TRAIN: False
+  VAL: False
+  TEST: False
+
+SAMPLE_RATE: 1.0
+
+MAX_COND_PER_SCENE: 128
