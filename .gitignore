@@ -11,3 +11,5 @@ __pycache__/
 *.zip
 *.tar.gz
 .DS_Store
+
+*/data_indexes/*
