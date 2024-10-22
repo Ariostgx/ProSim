@@ -12,8 +12,8 @@ Conference on Robot Learning (CoRL), 2024
 [**Paper**](https://www.arxiv.org/abs/2409.05863) |
 [**Model Colab**](https://colab.research.google.com/drive/1T2N9SweJQ-35DYJKI9WPKxOeB2elujCk?usp=sharing) |
 [**Data Colab**](https://colab.research.google.com/drive/1mcQCxpcZFnHLqjDQLYEJnuewvz-H5J4O?usp=sharing) | 
-[**Dataset (ProSim-Instruct-520k-Full)**](https://drive.google.com/file/d/1CMfp7PjWnyslHYC1kwvYA87T2KLtjHDN/view?usp=sharing) |
-[**Dataset (Mini Demo)**](https://drive.google.com/file/d/1Nh_ZzZ-Nk_T-Ufufcoav3UWgxskY1RzO/view?usp=sharing)
+[**ProSim-Instruct-520k Dataset**](https://drive.google.com/file/d/1CMfp7PjWnyslHYC1kwvYA87T2KLtjHDN/view?usp=sharing) |
+[**Mini Dataset**](https://drive.google.com/file/d/1Nh_ZzZ-Nk_T-Ufufcoav3UWgxskY1RzO/view?usp=sharing)
 
 ![ProSim Demo](assets/prosim_demo_video_2.gif)
 
