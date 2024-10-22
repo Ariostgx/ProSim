@@ -4,6 +4,7 @@ import torch
 import numpy as np
 from pathlib import Path
 import json
+import pickle
 
 from torch.nn.utils.rnn import pad_sequence
 from typing import List
@@ -52,6 +53,23 @@ default_trajdata_cfg = {
     "standardize_derivatives": False,
     "use_all_agents":False,
     }
+
+label_list_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prosim_instruct_520k')
+all_label_lists = {}
+for split in ['train', 'val']:
+    with open(os.path.join(label_list_dir, f'waymo_{split}_IDs.pkl'), 'rb') as f:
+        all_label_lists[split] = pickle.load(f)
+
+
+def get_prosim_instruct_520k_scene_id(batch_ele, split):
+    row = batch_ele.cache.scene_data_df.loc[('ego', 0)]
+    hash_df = (row["x"].item(), row["y"].item())
+    label_list = all_label_lists[split]
+
+    if hash_df not in label_list:
+        return None
+
+    return label_list[hash_df][0]
 
 def rotate(x, y, angle):
   if isinstance(x, torch.Tensor):
@@ -505,14 +523,18 @@ def filter_scene_tags(scene_id_tags: List[str], scene_interval: List[int], tgt_t
 
 def get_scene_motion_tag(batch_ele, config, all_motion_tags, split):
     scene_id = batch_ele.scene_id
+    prompt_scene_id = get_prosim_instruct_520k_scene_id(batch_ele, split)
 
     if all_motion_tags is None:
+        if prompt_scene_id is None:
+            return MotionTags([[]])
+
         motion_tag_path = config.DATASET.DATA_PATHS.MOTION_TAGS[split.upper()]
         
-        scene_idx = int(scene_id.split('_')[-1])
+        scene_idx = int(prompt_scene_id.split('_')[-1])
         scene_num = scene_idx % 100
         
-        scene_file = scene_id + '.json'
+        scene_file = prompt_scene_id + '.json'
         scene_file = os.path.join(motion_tag_path, str(scene_num), scene_file)
 
         if os.path.exists(scene_file):
@@ -602,11 +624,15 @@ def process_lines(lines):
   return lines
 
 def get_llm_text(batch_ele, config, split):
-    scene_id = batch_ele.scene_id
+    prompt_scene_id = get_prosim_instruct_520k_scene_id(batch_ele, split)
+    
+    if prompt_scene_id is None:
+        return LLMTexts([[]])
+
     llm_text_folder = config.PROMPT.CONDITION.LLM_TEXT_FOLDER[split.upper()]
 
-    scene_id_num = int(scene_id.split('_')[-1]) % 100
-    llm_text_path = os.path.join(llm_text_folder, str(scene_id_num), f'{scene_id}_10_90_output.txt')
+    scene_id_num = int(prompt_scene_id.split('_')[-1]) % 100
+    llm_text_path = os.path.join(llm_text_folder, str(scene_id_num), f'{prompt_scene_id}_10_90_output.txt')
     if os.path.exists(llm_text_path):
         try:
             _, _, cleaned_lines = load_text_file(llm_text_path)

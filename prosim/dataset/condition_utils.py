@@ -250,7 +250,7 @@ def get_llm_text_condition_batch(batch, cond_cfg, llm_texts):
     batch_inputs = []
     batch_prompt_idx = []
 
-    if llm_texts is None:
+    if llm_texts is None or len(llm_texts) == 0:
       scene_llm_data = batch.extras['llm_texts'][b]
     else:
       scene_llm_data = get_closest_llm_text(batch.scene_ids[b], batch.scene_ts[b].item(), llm_texts)

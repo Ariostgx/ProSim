@@ -16,17 +16,13 @@ ROOT_DIR = code_dir
 TRAJDATA_CACHE_DIR = os.path.join(data_dir, 'trajdata_cache')
 WAYMO_DATA_DIR = os.path.join(data_dir, 'waymo_source')
 DEMO_DATA_DIR = TRAJDATA_CACHE_DIR
-# LLM_MODEL_DIR = '/storage/Models/shuhan/Meta-Llama-3-8B-Instruct'
 LLM_MODEL_DIR = '' # Replace with your local path to Meta-Llama-3-8B-Instruct huggingface model directory
 
-PROSIM_INSTRUCT_520K_DATA_DIR = os.path.join(label_dir, 'prosim_instruct_520k')
+PROSIM_INSTRUCT_520K_DATA_DIR = os.path.join(label_dir, 'prosim_instruct_520k') # Replace with your local path to prosim_instruct_520k dataset
 
 MOTION_TAG_PATH = os.path.join(PROSIM_INSTRUCT_520K_DATA_DIR, 'tag_prompts')
 TEXT_PROMPT_PATH = os.path.join(PROSIM_INSTRUCT_520K_DATA_DIR, 'text_prompts')
 RESULT_PATH = os.path.join(ROOT_DIR, 'result')
-
-print(ROOT_DIR)
-print(data_dir)
 
 PATHS = {}
 
