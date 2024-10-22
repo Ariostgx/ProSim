@@ -490,7 +490,8 @@ def get_motion_tag_text_condition_batch(batch, cond_cfg, split, template_dict):
             agent_name = 'agent'
           
           # input = template.format(agent_name=agent_name, start_t=start_t, end_t=end_t)
-          input = template.format(agent_name=agent_name)
+          agent_idx = p_agent_names.index(tag['agents'][0])
+          input = template.format(agent_name='<A{}>'.format(agent_idx))
           batch_inputs.append(input)
 
           batch_prompt_idx.append(p_agent_names.index(tag['agents'][0]))
@@ -560,7 +561,9 @@ def get_v_action_tag_caption(batch, v_tag_cond):
 
     start_t, end_t = v_tag_cond['input'][bidx, cidx, 1:].cpu().tolist()
     
-    agent_name = batch_agent_names[bidx][v_tag_cond['prompt_idx'][bidx][cidx]][:5]
+    # agent_name = batch_agent_names[bidx][v_tag_cond['prompt_idx'][bidx][cidx]][:5]
+    agent_idx = str(v_tag_cond['prompt_idx'][bidx][cidx][0].cpu().item())
+    agent_name = '<A{}>'.format(agent_idx)
     
     tag_captions.append(f"{tag_name}({agent_name}: {start_t}-{end_t})")
   
